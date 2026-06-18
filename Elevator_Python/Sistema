@@ -1,0 +1,93 @@
+import random
+
+andares_validos = [-2, -1, 0, 1, 2, 3, 4]
+
+elevadores = {
+    "A": 0,
+    "B": 4
+}
+
+locais = {
+    -2: "Subsolo 2 - Garagem inferior",
+    -1: "Subsolo 1 - Garagem superior",
+    0: "Térreo - Entrada principal",
+    1: "1º Andar - Salas de aula",
+    2: "2º Andar - Laboratórios",
+    3: "3º Andar - Biblioteca",
+    4: "4º Andar - Administração"
+}
+
+eventos = [
+    "🎵 Música ambiente iniciada.",
+    "☕ Um professor entrou no elevador.",
+    "📚 Um aluno carregando livros embarcou.",
+    "🚪 Porta abrindo e fechando.",
+    "🔔 Campainha tocou.",
+    "🤖 Sistema realizou autodiagnóstico.",
+    "✨ Viagem tranquila.",
+    "🎉 Passageiro encontrou um amigo."
+]
+
+def escolher_elevador(origem):
+    distancia_a = abs(elevadores["A"] - origem)
+    distancia_b = abs(elevadores["B"] - origem)
+
+    if distancia_a <= distancia_b:
+        return "A"
+    return "B"
+
+def mover_elevador(elevador, destino):
+    posicao = elevadores[elevador]
+
+    while posicao != destino:
+        if posicao < destino:
+            posicao += 1
+        else:
+            posicao -= 1
+
+        print(f"Elevador {elevador} passando pelo andar {posicao}")
+
+        if random.randint(1, 100) <= 40:
+            print(random.choice(eventos))
+
+    elevadores[elevador] = destino
+
+while True:
+    try:
+        print("\n=== SISTEMA DE ELEVADORES ===")
+        origem = int(input("Andar onde você está: "))
+        destino = int(input("Andar de destino: "))
+
+        if origem not in andares_validos:
+            print("Erro: andar de origem inválido.")
+            continue
+
+        if destino not in andares_validos:
+            print("Erro: andar de destino inválido.")
+            continue
+
+        print("\nChamada recebida")
+
+        elevador = escolher_elevador(origem)
+
+        print(f"Elevador escolhido: {elevador}")
+        print(f"Embarque no elevador {elevador}")
+
+        mover_elevador(elevador, origem)
+
+        print("Usuário embarcou")
+
+        mover_elevador(elevador, destino)
+
+        print(f"\nEntrega ao andar {destino}")
+        print(f"Local: {locais[destino]}")
+        print("Viagem finalizada com sucesso")
+
+        continuar = input("\nDeseja fazer outra chamada? (s/n): ").lower()
+
+        if continuar != "s":
+            print("Sistema encerrado.")
+            break
+
+    except ValueError:
+        print("Erro: digite apenas números inteiros.")
